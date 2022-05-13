@@ -134,18 +134,28 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 
 /////////////////////////////////////////////////////////////////////
 //sticky navigation (using sticky class) to stick menu
+//Intersection Observer API: this API allows our code to observe changes to the way that certain target element intersects another element or the way it intersects viewport
 
-// const initialCoords = section1.getBoundingClientRect();
-// //console.log(initialCoords);
+// //callback function -> will be called everytime target element intersects with root element at threshold that is defined
+const obsCallback = function (entries, observer) {
+  //observer object also gets passed into the callback function
+  entries.forEach(entry => {
+    //to see at all of the entries
+    console.log(entry); //check the entries eg. intersection ratio -> when it starts intersecting......
+  });
+};
+//object
+const obsOptions = {
+  root: null, //element it is intersecting with
+  //eitehr we could have passed an element or null will observe the entire viewport
 
-// window.addEventListener('scroll', function () {
-//   //vertical distance from top
-//   //console.log(window.scrollY);
+  threshold: [0, 0.2], //10% //%age of intersection at which this intersection will be called
+  //we can have an array of threshold here
+};
+//create new intersection observer
+const observer = new IntersectionObserver(obsCallback, obsOptions);
+observer.observe(section1); //observing the target element
 
-//   // if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
-//   // else nav.classList.remove('sticky');
-//   nav.classList.add('sticky');
-// });
 const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height;
 
