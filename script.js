@@ -137,31 +137,31 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 //Intersection Observer API: this API allows our code to observe changes to the way that certain target element intersects another element or the way it intersects viewport
 
 // //callback function -> will be called everytime target element intersects with root element at threshold that is defined
-const obsCallback = function (entries, observer) {
-  //observer object also gets passed into the callback function
-  entries.forEach(entry => {
-    //to see at all of the entries
-    console.log(entry); //check the entries eg. intersection ratio -> when it starts intersecting......
-  });
-};
-//object
-const obsOptions = {
-  root: null, //element it is intersecting with
-  //eitehr we could have passed an element or null will observe the entire viewport
+// const obsCallback = function (entries, observer) {
+//   //observer object also gets passed into the callback function
+//   entries.forEach(entry => {
+//     //to see at all of the entries
+//     console.log(entry); //check the entries eg. intersection ratio -> when it starts intersecting......
+//   });
+// };
+// //object
+// const obsOptions = {
+//   root: null, //element it is intersecting with
+//   //eitehr we could have passed an element or null will observe the entire viewport
 
-  threshold: [0, 0.2], //10% //%age of intersection at which this intersection will be called
-  //we can have an array of threshold here
-};
-//create new intersection observer
-const observer = new IntersectionObserver(obsCallback, obsOptions);
-observer.observe(section1); //observing the target element
+//   threshold: [0, 0.2], //10% //%age of intersection at which this intersection will be called
+//   //we can have an array of threshold here
+// };
+// //create new intersection observer
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1); //observing the target element
 
 const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height;
 
 const stickyNav = function (entries) {
-  const [entry] = entries;
-  // console.log(entry);
+  const [entry] = entries; //destructuring
+  console.log(entry);
 
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
@@ -176,111 +176,27 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 headerObserver.observe(header);
 
 // ////////////////////////////////////////////////////////////////////
-// //REVEALING ELEMENTS ON SCROLL
+//REVEALING ELEMENTS ON SCROLL
+const allSections = document.querySelectorAll('.section');
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove('section--hidden');
+
+  //unobserve the observer
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
 
 // //achieved by simply adding classes to each section
-
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// //mouse enter event
-
-// /*const h1 = document.querySelector('h1');
-// h1.addEventListener('mouseenter', function (e) {
-//   alert('you are hovering over heading via event handler');
-// });
-// //older method to listen to events listeners using properties
-// h1.onmouseenter = function () {
-//   alert('you are hovering over heading via property');
-// };
-// //advantages of addeventLsiteniers()
-// //1.you can add multiple functions
-// //2.we can remove an event handler if we dont need it anymore
-// const alterH1 = function (e) {
-//   alert('you are hovering over heading via event handler and removing it.');
-
-//   h1.removeEventListener('mouseenter', alterH1);
-// };
-// h1.addEventListener('mouseenter', alterH1);
-// //you can remove it anytime yout want
-// setTimeout(() => h1.removeEventListener('mouseenter', alterH1), 3000);*/
-
-// /////////////////////////////////////////////////////////////////////
-// //event bubbling and capturing
-// /*
-// const randomInt = (min, max) =>
-//   Math.floor(Math.random() * (max - min) + 1 + min);
-// const randomColor = () =>
-//   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
-// // .nav -> .nav__links -> .nav__link
-// document.querySelector('.nav__link').addEventListener('click', function (e) {
-//   this.style.backgroundColor = randomColor();
-//   //   console.log('clicked');
-
-//   //e.target is the target that generated the event (where click happened) and not where the handler was attached
-//   //e.current handler is where the handler is attached
-//   console.log('link', e.target, e.currentTarget);
-//   console.log(e.currentTarget === this);
-
-//   //stop propagation
-//   e.stopPropagation();
-// });
-// document.querySelector('.nav__links').addEventListener('click', function (e) {
-//   this.style.backgroundColor = randomColor();
-//   console.log('clicked');
-//   console.log('container', e.target, e.currentTarget);
-//   console.log(e.currentTarget === this);
-// });
-// document.querySelector('.nav').addEventListener('click', function (e) {
-//   this.style.backgroundColor = randomColor();
-//   console.log('clicked');
-//   console.log('link', e.target, e.currentTarget);
-//   console.log(e.currentTarget === this);
-// });
-// */
-
-// /*Sticky navi
-// this API allows our code to  basically observes changes  to the way a certain taregt  element intersects anotehr element or the way it intersects the view port
-
-// how intersection of APIs work without sticky navigation
-
-// */
-// //create new intersection observer
-
-// // const obsCallback = function (entries, observer) {
-// //   entries.forEach(entry => {
-// //     console.log(entry);
-// //   });
-// // };
-
-// // //threshold means it should be 10% visible for intersect to be true
-// // const obsOptions = {
-// //   root: null,
-// //   //threshold: 0.1, //10%
-// //   //0 threshold means callback will be triggered each time that the target element moves completely out of the view or as soon as it enters the view
-// //   //another one at 20% either entring or leaving
-// //   threshold: [0, 0.2],
-// // };
-
-// // const observer = new IntersectionObserver(obsCallback, obsOptions);
-// // observer.observe(section1);
-
-// //sticky navigation
-// // const header = document.querySelector('.header');
-// // const navHeight = nav.getBoundingClientRect().height;
-
-// // const stickyNav = function (entries) {
-// //   const [entry] = entries;
-// //   // console.log(entry);
-
-// //   if (!entry.isIntersecting) nav.classList.add('sticky');
-// //   else nav.classList.remove('sticky');
-// // };
-
-// // const headerObserver = new IntersectionObserver(stickyNav, {
-// //   root: null,
-// //   threshold: 0,
-// //   rootMargin: `-${navHeight}px`,
-// // });
-
-// // headerObserver.observe(header);
