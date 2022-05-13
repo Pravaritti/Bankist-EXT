@@ -199,4 +199,50 @@ allSections.forEach(function (section) {
   section.classList.add('section--hidden');
 });
 
-// //achieved by simply adding classes to each section
+////////////////////////////////////////////////////
+//slider: slides are overlapping. make them side by side
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+let curSlide = 0;
+const maxSlide = slides.length;
+
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - curSlide)}%)`)
+  );
+};
+
+//position of slides at 0%, 100%, 200% and so on
+goToSlide(0);
+
+//Next slide -> basically changing tanslateX %age
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else {
+    curSlide++;
+  }
+  goToSlide(curSlide);
+  // -100% , 0%, 100%, 200%....
+};
+
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else {
+    curSlide--;
+  }
+  goToSlide(curSlide);
+};
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
+
+document.addEventListener('keydown', function (e) {
+  console.log(e);
+  //if (e.key === 'ArrowLeft') prevSlide();
+  //using short circuiting
+  e.key === 'ArrowLeft' && prevSlide();
+  e.key === 'ArrowRight' && nextSlide();
+});
